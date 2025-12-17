@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4 text-light">Détails du Travailleur</h2>
+
+    <div class="row g-3">
+        <div class="col-12 col-md-6">
+            <div class="card bg-dark text-light shadow-sm">
+                <div class="card-body">
+                    <p><strong>Matricule:</strong> {{ travailleur.matricule }}</p>
+                    <p><strong>Nom:</strong> {{ travailleur.nom }}</p>
+                    <p><strong>Prénom:</strong> {{ travailleur.prenom }}</p>
+                    <p><strong>Adresse:</strong> {{ travailleur.adresse }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="card bg-dark text-light shadow-sm">
+                <div class="card-body">
+                    <p><strong>Section:</strong> {{ travailleur.section }}</p>
+                    <p><strong>Fonction:</strong> {{ travailleur.fonction }}</p>
+                    <p><strong>Statut:</strong> {{ travailleur.statut }}</p>
+                    <p><strong>État:</strong> {{ travailleur.etat }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="card bg-dark text-light shadow-sm">
+                <div class="card-body">
+                    <p><strong>Date Embauche:</strong> {{ travailleur.date_embauche }}</p>
+                    <p><strong>Date Débauche:</strong> {{ travailleur.date_debauche }}</p>
+                    <p><strong>Motif Débauche:</strong> {{ travailleur.motif_de_debauche }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{% url 'travailleur_list' %}" class="btn btn-secondary">Retour</a>
+    </div>
+</div>
+
+<style>
+/* Dark cards et hover léger */
+.card {
+    border: 1px solid #444;
+    border-radius: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+}
+p {
+    margin-bottom: 0.5rem;
+}
+</style>
+{% endblock %}

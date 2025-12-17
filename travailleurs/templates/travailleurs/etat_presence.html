@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+
+<style>
+    body {
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+    table {
+        font-size: 0.9rem;
+    }
+    thead th {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background-color: #1e1e1e !important;
+    }
+    .table-responsive {
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+</style>
+
+<div class="container my-5">
+    <h2 class="mb-4 text-center text-info">📊 État de présence</h2>
+
+    <!-- Formulaire pour les dates -->
+    <form method="post" class="row g-3 mb-4">
+        {% csrf_token %}
+        <div class="col-md-4">
+            {{ form.date_debut.label_tag }}
+            {{ form.date_debut|add_class:"form-control bg-dark text-white" }}
+        </div>
+        <div class="col-md-4">
+            {{ form.date_fin.label_tag }}
+            {{ form.date_fin|add_class:"form-control bg-dark text-white" }}
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100">Générer la présence</button>
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+            <a href="{% url 'export_presence_excel' %}?date_debut={{ form.date_debut.value }}&date_fin={{ form.date_fin.value }}" 
+            class="btn btn-success w-100">
+                Exporter en Excel
+            </a>
+        </div>      
+    </form>
+
+    <!-- Tableau -->
+    {% if table %}
+    <div class="table-responsive">
+        <table class="table table-dark table-bordered table-hover text-center align-middle">
+            <thead class="table-secondary text-dark">
+                <tr>
+                    <th>Matricule</th>
+                    <th>Nom</th>
+                    {% for d in dates %}
+                        <th>{{ d|date:"d/m" }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in table %}
+                    <tr>
+                        <td>{{ row.travailleur.matricule }}</td>
+                        <td>{{ row.travailleur.nom }} {{ row.travailleur.prenom }}</td>
+                        {% for j in row.jours %}
+                            {% if j == 'NS' %}
+                                <td class="bg-warning text-dark fw-bold">{{ j }}</td>
+                            {% elif j in absences %}
+                                <td class="bg-danger text-white fw-bold">{{ j }}</td>
+                            {% elif j == 0 %}
+                                <td class="bg-secondary text-white">{{ j }}</td>
+                            {% elif j|add:0 < 10 %}
+                                <td class="bg-info text-dark">{{ j }}</td>
+                            {% else %}
+                                <td class="bg-success text-white">{{ j }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

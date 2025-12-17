@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-light">🌙 Liste des NightShift</h2>
+        <a href="{% url 'creer_nightshift' %}" class="btn btn-success">
+            ➕ Ajouter Nightshift
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-dark table-hover table-bordered align-middle text-center">
+            <thead class="table-secondary text-dark position-sticky top-0">
+                <tr>
+                    <th>Travailleur</th>
+                    <th>Date Début</th>
+                    <th>Date Fin</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for n in nightshifts %}
+                <tr>
+                    <td>{{ n.travailleur.matricule }}-{{ n.travailleur.nom }} {{ n.travailleur.prenom }}</td>
+                    <td>{{ n.date_debut }}</td>
+                    <td>{{ n.date_fin }}</td>
+                    <td>
+        
+                        <a href="{% url 'supprimer_nightshift' n.id %}" class="btn btn-danger btn-sm" 
+                           >
+                            🗑 Supprimer
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center text-muted">
+                        🚫 Aucune rotation NightShift enregistrée
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

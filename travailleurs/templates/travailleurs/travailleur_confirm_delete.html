@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Supprimer le Travailleur</h2>
+    <p>Êtes-vous sûr de vouloir supprimer <strong>{{ travailleur.nom }} {{ travailleur.prenom }}</strong> ?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Oui, supprimer</button>
+        <a href="{% url 'travailleur_list' %}" class="btn btn-secondary">Annuler</a>
+    </form>
+</div>
+{% endblock %}

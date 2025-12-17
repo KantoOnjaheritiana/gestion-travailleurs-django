@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .table-responsive {
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+    thead th {
+        position: sticky;
+        top: 0;
+        background-color: #e2e3e5;
+        z-index: 10;
+    }
+    .top-bar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        background-color: #212529;
+        padding: 10px 0;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="top-bar mb-3">
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <h2 class="text-light mb-2">📋 Liste des absences</h2>
+            <div class="d-flex gap-2">
+                <a href="{% url 'creer_absence' %}" class="btn btn-success">
+                    ➕ Nouvelle Absence
+                </a>
+                <a href="{% url 'export_absences_excel' %}?date_debut={{ request.GET.date_debut }}&date_fin={{ request.GET.date_fin }}" class="btn btn-success">
+                    📥 Exporter en Excel
+                </a>
+            </div>
+        </div>
+
+        <!-- Formulaire filtre -->
+        <form method="get" class="row g-2 mt-2">
+            <div class="col-md-3">
+                <input type="date" name="date_debut" class="form-control" value="{{ request.GET.date_debut }}">
+            </div>
+            <div class="col-md-3">
+                <input type="date" name="date_fin" class="form-control" value="{{ request.GET.date_fin }}">
+            </div>
+            <div class="col-md-6 d-flex gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-1">🔍 Filtrer</button>
+                <a href="{% url 'liste_absences' %}" class="btn btn-secondary flex-grow-1">❌ Défiltrer</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-dark table-hover table-bordered align-middle text-center">
+            <thead class="table-secondary text-dark">
+                <tr>
+                    <th>Matricule</th>
+                    <th>Nom et Prenom</th>
+                    <th>Date</th>
+                    <th>Motif</th>
+                    <th>Type</th>
+                    <th>Durée</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in absences %}
+                <tr>
+                    <td>{{ a.travailleur.matricule }}</td>
+                    <td>{{ a.travailleur.nom }} {{ a.travailleur.prenom }}</td>
+                    <td>{{ a.date }}</td>
+                    <td>{{ a.motif }}</td>
+                    <td>{{ a.type_absence }}</td>
+                    <td>{{ a.duree }}</td>
+                    <td>
+                        <a href="{% url 'modifier_absence' a.id %}" class="btn btn-warning btn-sm">✏ Modifier</a>
+                        <a href="{% url 'supprimer_absence' a.id %}" class="btn btn-danger btn-sm">🗑 Supprimer</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted">🚫 Aucune absence enregistrée</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,127 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Gestion Travailleurs{% endblock %}</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet"> 
+    <style>
+        body {
+            padding-top: 70px; /* navbar fixed */
+            padding-bottom: 60px; /* footer fixed */
+            margin: 0;
+            background-color: #121212; /* fond dark */
+            color: #f1f1f1;
+             background: url("{% static 'images/background.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            opacity: 0.99; /* Ajuste la transparence */
+            z-index: 0;
+        }
+       
+        main {
+            min-height: calc(100vh - 130px); /* navbar + footer */
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        .table-responsive {
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+        .navbar-dark .navbar-nav .nav-link {
+            color: #f1f1f1;
+        }
+        .navbar-dark .navbar-brand {
+            color: #ffffff;
+        }
+        .btn-outline-light {
+            color: #f1f1f1;
+            border-color: #f1f1f1;
+        }
+        .btn-outline-light:hover {
+            background-color: #f1f1f1;
+            color: #121212;
+        }
+        footer {
+            background-color: #1f1f1f;
+            color: #f1f1f1;
+        }
+        .table-dark {
+            color: #f1f1f1;
+        }
+        .form-control {
+            background-color: #1f1f1f;
+            color: #f1f1f1;
+            border: 1px solid #333;
+        }
+        .form-control:focus {
+            background-color: #1f1f1f;
+            color: #f1f1f1;
+            border-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar fixe dark -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'travailleur_list' %}">Gestion Travailleurs</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'travailleur_list' %}">Travailleurs</a>
+                        </li>
+                       <!--  <li class="nav-item">
+                            <a class="nav-link" href="{% url 'travailleur_create' %}">Ajouter Travailleur</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'export_travailleurs_excel' %}">Exporter Excel</a>
+                        </li> -->
+                        
+                        <li class="nav-item mb-2">
+                              <a class="nav-link" href="{% url 'liste_absences' %}">Absences</a>
+                         </li>
+                         <li class="nav-item mb-2">
+                                <a class="nav-link" href="{% url 'liste_nightshift' %}">Nightshift</a>
+                         </li>
+                         <li class="nav-item mb-2">
+                                 <a class="nav-link" href="{% url 'etat_presence' %}">Etat de Presence</a>
+                         </li>
+                         <li class="nav-item">
+                            <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                        </li>
+                    </ul>
+                    <!-- <form class="d-flex" role="search" method="get" action="{% url 'travailleur_list' %}">
+                        <input class="form-control me-2" type="search" placeholder="Recherche" aria-label="Search" name="q">
+                        <button class="btn btn-outline-light" type="submit">Rechercher</button>
+                    </form> -->
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main content -->
+  <main class="container-fluid mt-3 px-3">
+    {% block content %}
+    {% endblock %}
+  </main>
+
+
+    <!-- Footer fixe dark -->
+    <footer class="py-3 text-center">
+        &copy; 2025- Kanto Onjaheritiana - All rights Reserved
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+   <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

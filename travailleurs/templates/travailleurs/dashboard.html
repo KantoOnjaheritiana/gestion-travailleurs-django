@@ -1,0 +1,158 @@
+{% load static %}
+{% load dict_extras %} <!-- On va créer ce template filter -->
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    
+   <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">-->
+    <style>
+        body {
+            background-color: #121212;
+            color: #fff;
+            min-height: 100vh;
+        }
+         body {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url("{% static 'images/background.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            opacity: 0.99; /* Ajuste la transparence */
+            z-index: 0;
+        }
+        .sidebar {
+            background-color: #1f1f1f;
+            min-height: 100vh;
+        }
+        .sidebar a {
+            color: #fff;
+            text-decoration: none;
+        }
+        .sidebar a:hover {
+            background-color: #0d6efd;
+            color: #fff;
+            border-radius: 5px;
+        }
+        .card {
+            background-color: #1e1e1e;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            color: #fff;
+        }
+        .table-dark {
+            background-color: #1e1e1e;
+            color: #fff;
+        }
+        .table-dark th, .table-dark td {
+            border-color: #444;
+        }
+        .btn-primary {
+            background-color: #0d6efd;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-none d-md-block sidebar p-3">
+            <h4 class="text-center mb-4">Dashboard</h4>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2"><a class="nav-link" href="{% url 'dashboard' %}">Accueil</a></li>
+                <li class="nav-item mb-2"><a class="nav-link" href="{% url 'travailleur_list' %}">Travailleurs</a></li>
+                <li class="nav-item mb-2">
+                  <a class="nav-link" href="{% url 'liste_absences' %}">Absences</a>
+                </li>
+                <li class="nav-item mb-2">
+                  <a class="nav-link" href="{% url 'liste_nightshift' %}">Nightshift</a>
+                </li>
+                <li class="nav-item mb-2">
+                  <a class="nav-link" href="{% url 'etat_presence' %}">Etat de Presence</a>
+                </li>
+                <li class="nav-item mb-2"><a class="nav-link" href="{% url 'logout' %}">Se Déconnecter</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="col-md-10 ms-sm-auto px-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Bienvenue, {{ user.username }}</h1>
+            </div>
+
+            <!-- Stats -->
+            <div class="row mb-4">
+                <div class="col-md-3 mb-3">
+                    <div class="card p-3">
+                        <h5>Total Travailleurs</h5>
+                        <h2>{{ total_travailleurs }}</h2>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card p-3">
+                        <h5>Travailleurs Actifs</h5>
+                        <h2>{{ actifs }}</h2>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card p-3">
+                        <h5>Travailleurs Inactifs</h5>
+                        <h2>{{ inactifs }}</h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tableau croisé Section x Statut -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Travailleurs par Section et Statut</h5>
+                </div>
+                <div class="card-body table-responsive">
+                    <table class="table table-dark table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th>Statut \ Section</th>
+                                {% for section in sections %}
+                                    <th>{{ section }}</th>
+                                {% endfor %}
+                                <th>Total par Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in table_data %}
+                                <tr>
+                                    <td><strong>{{ row.statut }}</strong></td>
+                                    {% for section in sections %}
+                                        <td>{{ row|dict_key:section }}</td>
+                                    {% endfor %}
+                                    <td>{{ row.total }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot class="table-secondary text-dark">
+                            <tr>
+                                <th>Total par Section</th>
+                                {% for section in sections %}
+                                    <th>{{ total_par_section|dict_key:section }}</th>
+                                {% endfor %}
+                                <th>{{ total_general }}</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+<footer class="py-3 text-center">
+        &copy; 2025- Kanto Onjaheritiana - All rights Reserved
+    </footer>
+</html>

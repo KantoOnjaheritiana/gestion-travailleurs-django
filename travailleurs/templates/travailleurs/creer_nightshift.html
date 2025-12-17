@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card bg-dark text-white p-4">
+        <h2>{% if form.instance %}Modifier{% else %}Créer{% endif %} NightShift 🌙</h2>
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                {{ form.date_debut.label_tag }} 
+                {{ form.date_debut|add_class:"form-control bg-dark text-white" }}
+            </div>
+            <div class="mb-3">
+                {{ form.date_fin.label_tag }} 
+                {{ form.date_fin|add_class:"form-control bg-dark text-white" }}
+            </div>
+            <div class="mb-3">
+                <label>Travailleurs</label>
+                <div class="border rounded p-2" style="max-height:300px; overflow-y:auto;">
+                    {{ form.travailleurs }}
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">💾 Enregistrer</button>
+            <a href="{% url 'liste_nightshift' %}" class="btn btn-secondary">↩️ Retour</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
